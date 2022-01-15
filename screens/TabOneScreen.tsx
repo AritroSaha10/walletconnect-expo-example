@@ -1,14 +1,20 @@
-import React, { useEffect } from 'react';
-import { StyleSheet, TouchableOpacity, Button } from 'react-native';
+import React from 'react';
+import { StyleSheet, TouchableOpacity, Button, Linking } from 'react-native';
 
-import EditScreenInfo from '../components/EditScreenInfo';
 import { Text, View } from '../components/Themed';
 import { RootTabScreenProps } from '../types';
 
 import { useWalletConnect } from '@walletconnect/react-native-dapp';
 
-import Moralis from 'moralis/types';
-import { useMoralis } from "react-moralis";
+import { createAlchemyWeb3 } from '@alch/alchemy-web3';
+
+const API_URL = "https://eth-ropsten.alchemyapi.io/v2/uWkv8nfaqAR8R27a8igUtgeZudpC72nn";
+
+const web3 = createAlchemyWeb3(API_URL);
+
+const contract = require("../artifacts/contracts/MyMemories.sol/MyMemories.json");
+const contractAddress = "0x587Fe49b1C74513830f386360dE243A57a8962Ec";
+const nftContract = new web3.eth.Contract(contract.abi, contractAddress);
 
 const shortenAddress = (address: string) => {
   return `${address.slice(0, 6)}...${address.slice(
@@ -19,22 +25,45 @@ const shortenAddress = (address: string) => {
 
 export default function TabOneScreen({ navigation }: RootTabScreenProps<'TabOne'>) {
   const connector = useWalletConnect();
-  
-  const {
-    authenticate,
-    authError,
-    isAuthenticating,
-    isAuthenticated,
-    logout,
-  } = useMoralis();
-  
-  console.log(isAuthenticated)
-  
 
   const connectWallet = React.useCallback(() => {
-    authenticate();
     return connector.connect();
   }, [connector]);
+
+  const mintNFT = async (tokenURI: string) => {
+    console.log("Private key (?): ", connector.key);
+    console.log("Public key (?): ", connector.accounts[0]);
+
+    
+
+    console.log(connector)
+
+    if (connector.connected) {
+      const nonce = await web3.eth.getTransactionCount(connector.accounts[0], "latest");
+
+      console.log(nonce);
+
+      const tx = {
+        from: connector.accounts[0],
+        to: contractAddress,
+        nonce: nonce,
+        gas: 500000,
+        maxPriorityFeePerGas: 1999999987,
+        data: nftContract.methods.mintNFT(connector.accounts[0], tokenURI).encodeABI()
+      };
+
+      console.log(tx);
+
+      const signedTx = await web3.eth.accounts.signTransaction(tx, "5411d7e7ba6557ce27ccb2da8949a94d496ca1d4b34d0cd16445900335930ad0");
+
+      console.log(signedTx);
+
+      const transactionReceipt = await web3.eth.sendSignedTransaction(signedTx.rawTransaction ?? "");
+
+      console.log(`NFT Hash: ${transactionReceipt.to}`);
+      Linking.openURL(`https://ropsten.etherscan.io/tx/${transactionReceipt.transactionHash}`);
+    }
+  }
 
   const killSession = React.useCallback(() => {
     return connector.killSession();
@@ -57,15 +86,17 @@ export default function TabOneScreen({ navigation }: RootTabScreenProps<'TabOne'
             <Text style={styles.buttonTextStyle}>Log out</Text>
           </TouchableOpacity>
 
-          <Button onPress={()=>{
-          connector.sendTransaction({
-            from: connector.accounts[0],
-            to: "0x3a339C136F4482f348e3921EDBa8b8Ebd6931f08",
-            value: "10000000000000000"
-          })
+          <Button onPress={() => {
+            connector.sendTransaction({
+              from: connector.accounts[0],
+              to: "0x3a339C136F4482f348e3921EDBa8b8Ebd6931f08",
+              value: "10000000000000000"
+            })
+          }} title="SEND" />
 
-          
-        }} title="SEND" />
+          <TouchableOpacity onPress={() => {mintNFT(`https://gateway.pinata.cloud/ipfs/QmS9rLwajofQuSXvqAtwy5HtjMGSemA7ijaj5NRFRs9gxk`)}}>
+            <Text>Mint an NFT</Text>
+          </TouchableOpacity>
         </>
       )}
     </View>
