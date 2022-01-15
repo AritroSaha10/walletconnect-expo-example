@@ -1,11 +1,14 @@
-import React from 'react';
-import { StyleSheet, TouchableOpacity } from 'react-native';
+import React, { useEffect } from 'react';
+import { StyleSheet, TouchableOpacity, Button } from 'react-native';
 
 import EditScreenInfo from '../components/EditScreenInfo';
 import { Text, View } from '../components/Themed';
 import { RootTabScreenProps } from '../types';
 
 import { useWalletConnect } from '@walletconnect/react-native-dapp';
+
+import Moralis from 'moralis/types';
+import { useMoralis } from "react-moralis";
 
 const shortenAddress = (address: string) => {
   return `${address.slice(0, 6)}...${address.slice(
@@ -16,8 +19,20 @@ const shortenAddress = (address: string) => {
 
 export default function TabOneScreen({ navigation }: RootTabScreenProps<'TabOne'>) {
   const connector = useWalletConnect();
+  
+  const {
+    authenticate,
+    authError,
+    isAuthenticating,
+    isAuthenticated,
+    logout,
+  } = useMoralis();
+  
+  console.log(isAuthenticated)
+  
 
   const connectWallet = React.useCallback(() => {
+    authenticate();
     return connector.connect();
   }, [connector]);
 
@@ -29,6 +44,7 @@ export default function TabOneScreen({ navigation }: RootTabScreenProps<'TabOne'
     <View style={styles.container}>
       <Text style={styles.title}>Tab One</Text>
       <View style={styles.separator} lightColor="#eee" darkColor="rgba(255,255,255,0.1)" />
+
       {!connector.connected && (
         <TouchableOpacity onPress={connectWallet} style={styles.buttonStyle}>
           <Text style={styles.buttonTextStyle}>Connect a Wallet</Text>
@@ -40,6 +56,16 @@ export default function TabOneScreen({ navigation }: RootTabScreenProps<'TabOne'
           <TouchableOpacity onPress={killSession} style={styles.buttonStyle}>
             <Text style={styles.buttonTextStyle}>Log out</Text>
           </TouchableOpacity>
+
+          <Button onPress={()=>{
+          connector.sendTransaction({
+            from: connector.accounts[0],
+            to: "0x3a339C136F4482f348e3921EDBa8b8Ebd6931f08",
+            value: "10000000000000000"
+          })
+
+          
+        }} title="SEND" />
         </>
       )}
     </View>
