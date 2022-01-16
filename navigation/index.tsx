@@ -12,17 +12,14 @@ import { ColorSchemeName, Pressable } from 'react-native';
 
 import Colors from '../constants/Colors';
 import useColorScheme from '../hooks/useColorScheme';
-import ModalScreen from '../screens/ModalScreen';
-import NotFoundScreen from '../screens/NotFoundScreen';
-import TabOneScreen from '../screens/TabOneScreen';
-import TabTwoScreen from '../screens/TabTwoScreen';
 import { RootStackParamList, RootTabParamList, RootTabScreenProps } from '../types';
 import LinkingConfiguration from './LinkingConfiguration';
 
-import Login from '../screens/Login';
-import Signup from '../screens/Signup';
 import Dashboard from '../screens/Dashboard';
 import Connection from '../screens/Connection';
+import Trending from '../screens/Trending';
+import Collection from '../screens/Collection';
+
 
 export default function Navigation({ colorScheme }: { colorScheme: ColorSchemeName }) {
   return (
@@ -58,7 +55,8 @@ function RootNavigator() {
 
       <Stack.Screen name="Connect Wallet" component={Connection} />
       <Stack.Screen name="Dashboard" options={{ headerShown: false }} component={Dashboard} />
-      
+      <Stack.Screen name="Trending" component={Trending} />
+      <Stack.Screen name="Collection" component={Collection} />
     </Stack.Navigator>
   );
 }

@@ -1,4 +1,5 @@
 import { createAlchemyWeb3 } from '@alch/alchemy-web3';
+import axios from 'axios';
 
 const API_URL = "https://eth-ropsten.alchemyapi.io/v2/uWkv8nfaqAR8R27a8igUtgeZudpC72nn";
 const MINTING_ACCOUNT_PRIVATE_KEY = "5411d7e7ba6557ce27ccb2da8949a94d496ca1d4b34d0cd16445900335930ad0";
@@ -42,6 +43,13 @@ export const mintNFT = async (tokenURI, connector) => {
     }
 }
 
-export const getCurrentEthBal = async (connector, account) => {
-    
+export const getCurrentEthBal = async (connector) => {
+    const res = await axios.get(`https://api-ropsten.etherscan.io/api?module=account&action=balance&address=${connector.accounts[0]}&tag=latest&apikey=W5215M662Q7RN36NGHWE93JJH1ZFJKK37G`);
+    let ether = web3.utils.fromWei(res.data.result, 'ether');
+
+    // Trim
+    ether = ether.length > 5 ? ether.slice(0, 6) : ether;
+    ether = parseInt(ether).toString();
+
+    return ether;
 }

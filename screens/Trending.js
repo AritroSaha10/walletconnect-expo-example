@@ -19,34 +19,34 @@ import Searchbar from '../components/searchbar'
 
 const image = { uri: "https://i.ibb.co/Z88yrNT/Onboarding-Screen-2.png" }
 
-const Collection = () => {
+const Trending = () => {
     return (
         <ImageBackground source={image} style={styles.image}>
             <ScrollView>
                 <VStack space={3}>
                     <HStack justifyContent='space-between' alignItems='flex-start' paddingLeft={'15px'}>
-                        <Text color="white" fontSize="32" fontFamily="Philosopher-Bold">My Memories</Text>
+                        <Text color="white" fontSize="32" fontFamily="Philosopher-Bold">Trending Memories</Text>
                     </HStack>
                     <Searchbar/>
                     <Stack alignItems='flex-start' paddingLeft="15px">
                         <VStack space={5}>
-                                <HomeCard 
-                                    imageUri = {{uri: "https://i.ibb.co/wMPJJF1/9f62f4039ba8ba65a45c1692c6a73b42.jpg"}}
-                                    title="Las Vegas Adventure"
-                                    id="0x9144f659c...403D8fB22261"
-                                    likes="2"
+                        <HomeCard 
+                                    imageUri = {{uri: "https://i.ibb.co/drCpCRP/Hawaii-2-e1642281817102.jpg"}}
+                                    title="Trip to hawaii"
+                                    id="0x9asd5s234c...403D261"
+                                    likes="980"
                                 />
                                 <HomeCard 
-                                    imageUri = {{uri: "https://i.ibb.co/4J3q70j/images-8.jpg"}}
-                                    title="Merry Christmas James!"
-                                    id="0x914asd59c...20asd8fB22"
-                                    likes="5"
+                                    imageUri = {{uri: "https://i.ibb.co/BchGdzx/download.jpg"}}
+                                    title="The Kremlin"
+                                    id="0x9afg659c...40asB22261"
+                                    likes="323"
                                 />
                                 <HomeCard 
-                                    imageUri = {{uri: "https://i.ibb.co/GntR79g/unknown.png"}}
-                                    title="John's Postcard"
-                                    id="0x92dsa65am...w3sada2261"
-                                    likes="1"
+                                    imageUri = {{uri: "https://i.ibb.co/RTBnr48/output-2022-01-13-21-12-56.png"}}
+                                    title="Cancun Beaches"
+                                    id="0x9144asd9c...403afB22261"
+                                    likes="300"
                                 />
                         </VStack>
                     </Stack>
@@ -64,4 +64,4 @@ const styles = StyleSheet.create({
     },
 });
 
-export default Collection
+export default Trending

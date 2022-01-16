@@ -6,6 +6,7 @@ import {
   Heading,
   VStack,
   FormControl,
+  IconButton,
   Input,
   Link,
   Button,
@@ -19,7 +20,7 @@ import { View, StyleSheet} from 'react-native'
 import { MaterialCommunityIcons, MaterialIcons } from '@expo/vector-icons';
 
 export default function App() {
-  const [selected, setSelected] = React.useState(1);
+  const [selected, setSelected] = React.useState(0);
   return (
       <View style={style.container}>
            <NativeBaseProvider>
@@ -58,7 +59,10 @@ export default function App() {
                     />
                     </Center>
                 </Pressable>
-                <Box width={20}></Box>
+                <IconButton bg="black" borderRadius="full" icon={<Icon as={MaterialIcons} name="add" />}  _icon={{
+        color: "white",
+        size: "lg",
+      }}/>
                 <Pressable
                     opacity={selected === 2 ? 1 : 0.6}
                     py="2"
