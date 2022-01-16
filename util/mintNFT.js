@@ -41,3 +41,7 @@ export const mintNFT = async (tokenURI, connector) => {
         return null;
     }
 }
+
+export const getCurrentEthBal = async (connector, account) => {
+    
+}

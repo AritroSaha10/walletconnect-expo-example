@@ -5,20 +5,23 @@ const Login = () => {
     const navigation = useNavigation();
     return (
         <View style={{flex:1, alignItems:'center', justifyContent:'center'}}>
-            <Text>Login Screen</Text>
+            <Text style={{ color: "white", marginBottom: 10 }}>Login Screen</Text>
+
             <TouchableOpacity onPress={()=>navigation.navigate('Signup')}>
-                <Text>Move to Signup Screen</Text>
+                <Text style={{ color: "white", marginBottom: 10 }}>Move to Signup Screen</Text>
             </TouchableOpacity>
+
             <TouchableOpacity onPress={() => {
                 navigation.reset({
                     index: 0,
                     routes: [{ name: 'Dashboard' }],
                 });
             }}>
-                <Text>Go to dashboard</Text>
+                <Text style={{ color: "white", marginBottom: 10 }}>Go to Dashboard</Text>
             </TouchableOpacity>
-            <TouchableOpacity onPress={() =>navigation.navigate('Connection')}>
-                <Text>Wallet Connection</Text>
+
+            <TouchableOpacity onPress={() =>navigation.navigate('Connect Wallet')}>
+                <Text style={{ color: "white", marginBottom: 10 }}>Wallet Connection</Text>
             </TouchableOpacity>
         </View>
     )

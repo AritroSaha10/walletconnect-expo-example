@@ -1,10 +1,13 @@
-import React, { useState } from 'react'
-import { ImageBackground, View, StyleSheet, AppRegistry, TouchableOpacity, Alert, SafeAreaView, StatusBar } from 'react-native';
-import { NativeBaseProvider, Text, Button, Icon, Center, Image, AspectRatio, Heading, HStack, Stack, Box, VStack, Spacer, Modal, FormControl, Input } from 'native-base';
+import React, { useEffect, useState } from 'react'
+import { ImageBackground, View, StyleSheet, AppRegistry, TouchableOpacity, Alert, SafeAreaView, StatusBar, Image } from 'react-native';
+import { NativeBaseProvider, Text, Button, Icon, Center, AspectRatio, Heading, HStack, Stack, Box, VStack, Spacer, Modal, FormControl, Input } from 'native-base';
 
 import { useWalletConnect } from '@walletconnect/react-native-dapp';
 import { Linking } from 'react-native';
 import { mintNFT } from '../util/mintNFT';
+
+import walletImg from "../assets/images/wallet.png"
+import { useNavigation } from '@react-navigation/native';
 
 const shortenAddress = (address) => {
     return `${address.slice(0, 6)}...${address.slice(
@@ -19,6 +22,7 @@ const onPress = () => { };
 
 const Connection = () => {
     const connector = useWalletConnect();
+    const navigator = useNavigation();
 
     const connectWallet = React.useCallback(() => {
         return connector.connect();
@@ -32,11 +36,15 @@ const Connection = () => {
     const [nftMintData, setNFTMintData] = useState({});
     const [mintingInProgress, setMintingInProgress] = useState(false);
 
+    useEffect(() => {
+        if (connector.connected) {
+            navigator.navigate("Dashboard")
+        }
+    }, [connector]);
     return (
         <View style={{ flex: 1, alignItems: 'center', justifyContent: 'center' }}>
             <Modal isOpen={showModal} onClose={() => setShowModal(false)}>
                 <Modal.Content maxWidth="400px">
-                    <Modal.CloseButton />
                     <Modal.Header>
                         NFT Info
                     </Modal.Header>
@@ -44,7 +52,7 @@ const Connection = () => {
                     <Modal.Body>
                         <Text fontSize="xs">🎉 Congrats, your NFT has been minted! 🎉</Text>
                         <Text fontSize="xs" mt="1">Copy paste these into your desired wallet app to access them.</Text>
-                        
+
                         <FormControl mt="3">
                             <FormControl.Label>Address</FormControl.Label>
                             <Input value={nftMintData.contractHash} />
@@ -52,15 +60,14 @@ const Connection = () => {
 
                         <FormControl mt="3">
                             <FormControl.Label>ID</FormControl.Label>
-                            <Input value={nftMintData.tokenID.toString()} />
+                            <Input value={nftMintData.tokenID ? nftMintData.tokenID.toString() : ""} />
                         </FormControl>
                     </Modal.Body>
 
                     <Modal.Footer>
                         <Button.Group space={2}>
                             <Button
-                                variant="ghost"
-                                colorScheme="blueGray"
+
                                 onPress={() => {
                                     setShowModal(false)
                                 }}
@@ -73,6 +80,7 @@ const Connection = () => {
             </Modal>
 
             <ImageBackground source={image} resizeMode='cover' style={styles.image}>
+                {/*
                 <Button
                     position={'absolute'}
                     bottom={10}
@@ -85,14 +93,39 @@ const Connection = () => {
                 >
                     ❓ Metamask
                 </Button>
+                    */}
 
-                <VStack h="100%" p={2}>
+                <VStack h="100%" p={2} alignItems="center" w="75%" alignSelf="center">
                     <Spacer />
                     {!connector.connected && (
-                        <Button onPress={connectWallet} p={5}>
-                            Connect a Wallet
-                        </Button>
+                        <>
+                            <Image
+                                source={require('../assets/images/wallet.png')}
+                                alt="imposter?!"
+                                style={{
+                                    width: 250,
+                                    height: 250,
+                                    marginBottom: 50
+                                }}
+                            />
+
+                            <Button
+                                onPress={connectWallet}
+                                p={5}
+                                w="full"
+                                variant="subtle"
+                                bg="#2D2F41"
+                                borderRadius="xl"
+                                mx={50}
+                            >
+                                Connect a Wallet
+                            </Button>
+                        </>
                     )}
+
+
+
+                    {/*
                     {!!connector.connected && (
                         <>
                             <HStack w="full">
@@ -118,8 +151,12 @@ const Connection = () => {
                                 mx={5}
                                 my={2}
                                 disabled={mintingInProgress}
+                                isLoading={mintingInProgress}
+                                spinnerPlacement="end"
+                                isLoadingText="Minting NFT..."
+                                bg="#2D2F41"
                             >
-                                {mintingInProgress ? "Minting..." : "Mint an NFT"}
+                                Mint an NFT
                             </Button>
 
                             <Button onPress={killSession} mx={5} my={2}>
@@ -127,6 +164,8 @@ const Connection = () => {
                             </Button>
                         </>
                     )}
+                            */}
+
                     <Spacer />
                 </VStack>
 

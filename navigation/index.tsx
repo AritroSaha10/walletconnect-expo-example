@@ -51,10 +51,14 @@ function RootNavigator() {
       </Stack.Group>
       */}
 
-      <Stack.Screen name="Login" component={Login} />
+      {/* 
+      <Stack.Screen name="Login" component={Login} /> 
       <Stack.Screen name="Signup" component={Signup} />
+      */}
+
+      <Stack.Screen name="Connect Wallet" component={Connection} />
       <Stack.Screen name="Dashboard" options={{ headerShown: false }} component={Dashboard} />
-      <Stack.Screen name="Connection" component={Connection} />
+      
     </Stack.Navigator>
   );
 }

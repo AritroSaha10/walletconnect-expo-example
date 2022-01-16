@@ -52,7 +52,7 @@ export default function App() {
       <SafeAreaProvider>
         <NativeBaseProvider>
         <Providers>
-          <Navigation />
+          <Navigation colorScheme="dark" />
         </Providers>
         <StatusBar />
         </NativeBaseProvider>
